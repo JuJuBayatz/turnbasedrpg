@@ -18,7 +18,10 @@ func begin_next_turn():
 
 func end_current_turn():
 	emit_signal("character_end_turn", cur_char)
-	await get_tree().create_time(next_turn_delay).timeout
+	var sd=  get_tree()
+	print("get_tree")
+	print(sd)
+	await get_tree().create_timer(next_turn_delay).timeout
 	if game_over == false:
 		begin_next_turn()
 	
@@ -33,5 +36,7 @@ signal character_begin_turn(character)
 signal character_end_turn(character)
 
 func _ready() -> void:
+	var sd=  get_tree()
+	print(sd)
 	await get_tree().create_timer(0.5).timeout	
 	begin_next_turn()

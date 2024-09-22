@@ -39,8 +39,24 @@ func _update_health_bar():
 	health_text.text = str(current_hp, " / ", max_hp)
 	
 func _on_character_begin_turn(character):
-	pass
+	if is_player == false:
+		_decide_combat_action()
 	
-func cast_combat_action(action):
-	print(action)
+func cast_combat_action(action: CombatAction):
+	if action.damage > 0:
+		opponent.take_damage(action.damage)
+	else:
+		heal(action.heal)
+		
+	get_node("/root/BattleScene").end_current_turn()
+
+func _decide_combat_action():
+	var health_percent = (current_hp*100)/max_hp
+	
+	for i in combat_actions:
+		var action = i  as CombatAction 
+	if health_percent<20
+		pass
+	else:
+		pass
 	
