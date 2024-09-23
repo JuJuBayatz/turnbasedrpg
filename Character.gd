@@ -17,7 +17,9 @@ class_name Character
 func _ready() -> void:
 	$Sprite.texture = visual
 	$Sprite.flip_h = flip_visual
-	get_node("/root/BattleScene").character_begin_turn.connect(_on_character_begin_turn)
+	print(str("character_begin_turn trigger:"))
+	if is_player:
+		get_node("/root/BattleScene").character_begin_turn.connect(_on_character_begin_turn)
 	health_bar.max_value = max_hp
 	_update_health_bar()
 
@@ -26,7 +28,7 @@ func take_damage(damage):
 	_update_health_bar()
 	if current_hp <= 0:
 		get_node("/root/BattleScene").character_died(self)
-		queue_free()
+		#queue_free()
 
 func heal(amount):
 	current_hp += amount
@@ -39,10 +41,13 @@ func _update_health_bar():
 	health_text.text = str(current_hp, " / ", max_hp)
 	
 func _on_character_begin_turn(character):
+	print(str("combat_actions count :", len(combat_actions)))
 	if is_player == false:
+		print("_decide_combat_action")
 		_decide_combat_action()
 	
 func cast_combat_action(action: CombatAction):
+	print("cast_combat_action")
 	if action.damage > 0:
 		opponent.take_damage(action.damage)
 	else:
@@ -51,11 +56,21 @@ func cast_combat_action(action: CombatAction):
 	get_node("/root/BattleScene").end_current_turn()
 
 func _decide_combat_action():
-	var health_percent = (current_hp*100)/max_hp
+	var health_percent:float = float(current_hp)/max_hp
 	
 	for i in combat_actions:
 		var action = i  as CombatAction 
-	if health_percent<20
+		if action.heal > 0:
+			if randf() > health_percent + 0.2:
+				cast_combat_action(action)
+				return	
+			else:
+				continue
+		else:
+			#pass
+			cast_combat_action(action)	
+		
+	if health_percent<20:
 		pass
 	else:
 		pass

@@ -7,20 +7,22 @@ var game_over : bool = false
 
 
 func begin_next_turn():
+	print("begin_next_turn")
 	if cur_char == player_char:
+		print("if")
 		cur_char = enemy_char
 	elif cur_char == enemy_char:
+		print("elif")
 		cur_char = player_char
 	else:
+		print("else")
 		cur_char = player_char	
 
 	emit_signal("character_begin_turn", cur_char)
 
 func end_current_turn():
+	print("end_current_turn")
 	emit_signal("character_end_turn", cur_char)
-	var sd=  get_tree()
-	print("get_tree")
-	print(sd)
 	await get_tree().create_timer(next_turn_delay).timeout
 	if game_over == false:
 		begin_next_turn()
